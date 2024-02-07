@@ -1,0 +1,33 @@
+-- This query finds... 
+-- Those patients with a patflag of A or C (acceptable for research)
+-- And whose practice is in England
+-- Who have a memory clinic code
+-- Entered between 1st April 2016 - 31st March 2017 (between is inclusive)
+-- And who have not transferred out; or transferred out after 31st March 2017
+--------------------------------------------------------------------------------------
+Select * 
+INTO [THIN_Analysis].[dbo].[DemMem1617.LThackray]
+from
+(
+SELECT 
+row_number () over (partition by a.combid order by b.evdate) AS DateNo,a.combid AS ID, a.yob AS DOB, a.sex, -- partitions and orders rows
+a.marit AS Marital, a.regdate, a.regstat, a.inst AS CareHome, a.death, a.xferdate,
+b.evdate AS FirstEvent, b.enddate, b.dtype AS Medinfo, b.medcode, b.medflag, b.staffid AS staff, b.source, b.episode, b.loc, 
+c.description
+
+FROM 
+[THIN_pps1705].[dbo].[pat1705] AS a
+INNER JOIN [THIN_med1705].[dbo].[med1705] AS b ON a.combid = b.combid
+LEFT JOIN [THIN_ancil1705].[dbo].[Readcodes1705] AS c ON b.medcode = c.medcode
+
+WHERE
+((patflag = 'A') OR (patflag = 'C'))
+AND a.prac IN (SELECT prac FROM [THIN_ancil1705].[dbo].[THINprac1705] WHERE Country = 'E' )
+AND b.medcode IN ('8HTY.00')
+AND b.evdate BETWEEN 20160401 AND 20170331
+AND (xferdate = 00000000 OR xferdate > 20170331))D
+ORDER BY D.ID, D.FirstEvent;
+
+
+
+
