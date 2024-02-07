@@ -1,0 +1,16 @@
+/* All people with dementia readcode joined to stages of dementia */
+
+SELECT *
+FROM [THIN_Analysis].[dbo].[DemDiag1617.LThackray] AS a
+LEFT JOIN [THIN_med1705].[dbo].[med1705] AS b 
+ON a.ID = b.combid
+WHERE 
+b.medcode IN
+('388m.11', 'ZRaA.11') -- MMSE tests
+-- The following are different tests/info and care plans in THIN
+/*('13Y7.00', '38C1000', '38C1300', '3A...12', '3AD..00', '3AD1.00', '3AD2.00',  '3AE..00', '66h..00', '67DF.00', '6AB..00', '6AQ..00', 
+'8BM0200', '8BPa.00', '8CET.00', '8CMe000', '8CMG200', '8CMZ.00', '8CMZ000', '8CMZ100', '8CMZ200', '8CMZ300', '8CSA.00',
+'8Hla.00',  '8IAe000', '8IAe200', '8IBB000', '8IEu.00', '8IEu000', '8T05.00', '8T05000', '8T05100', '8T05200', '8T0Y.00', '918f000',
+'918y.00', '9hD..00', '9hD0.00', '9hD1.00',  '9OqD.00',  '9OqE.00', '9OqF.00', '9Ou..00', '9Ou1.00', '9Ou2.00', '9Ou3.00', '9Ou4.00',
+'9Ou5.00', 'ZR1K.00', 'ZR1K.11', 'ZR1T.00', 'ZR2X.00', 'ZR2X.12', 'ZR2X.14', 'ZR3V.00', 'ZR3V.11', 'ZR3V.12', 'ZR3V.13', 'ZRV9.00')*/
+ORDER BY a.ID;
