@@ -1,0 +1,25 @@
+-- Final script joins first diagnosis table, first drugs prescribed table and first visit to memory clinic table
+
+WITH visit AS 
+
+(SELECT ID, DOB, sex, CareHome, death, FirstEvent, medcode, description, loc AS Diagloc, source AS Diagsource
+FROM [THIN_Analysis].[dbo].[DemDiag1617.LThackray] a
+WHERE a.DateNo = 1),
+
+drug as 
+(SELECT ID, ScriptDate, drugcode, Location AS drugloc, drugsource
+FROM [THIN_Analysis].[dbo].[DemDrugs1617.LThackray] b
+WHERE b.Sequence = 1),
+
+clinic as 
+(SELECT ID, source AS memsource, loc AS Memloc, description AS Memdescribe, FirstEvent AS ClinicVisit
+FROM [THIN_Analysis].[dbo].[DemMem1617.LThackray] c
+WHERE c.DateNo = 1)
+
+SELECT visit.ID, DOB, sex, CareHome, death, FirstEvent, medcode, description, Diagloc, Diagsource, 
+ScriptDate, drugcode, drugloc, drugsource, ClinicVisit,
+Memdescribe, Memloc, memsource  
+FROM visit 
+left outer join drug ON visit.ID = drug.ID
+left outer join clinic ON visit.ID = clinic.ID
+Order by ID
