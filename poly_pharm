@@ -1,0 +1,8 @@
+SELECT a.ID, DOB, sex, c.medcode, c.description
+FROM [THIN_Analysis].[dbo].[DemDiag1617.LThackray] AS a
+LEFT JOIN [THIN_med1705].[dbo].[med1705] AS b 
+ON a.ID = b.combid
+LEFT JOIN [THIN_ancil1705].[dbo].[Readcodes1705] AS c
+ON b.medcode = c.medcode
+WHERE b.evdate BETWEEN '20160401' AND '20170331' 
+ORDER BY a.ID;
